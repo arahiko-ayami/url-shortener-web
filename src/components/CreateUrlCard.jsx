@@ -15,8 +15,10 @@ function CreateUrlCard() {
   const [showCustomUrl, setShowCustomUrl] = useState(false);
   const [errorCode, setErrorCode] = useState(null);
   const [shortenedUrl, setShortenedUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleOnCreate(e) {
+    setLoading(true);
     e.preventDefault();
     setErrorCode(null);
     setShortenedUrl("");
@@ -26,6 +28,7 @@ function CreateUrlCard() {
       }
     );
     setShortenedUrl(`${BASE_URL}${data.id}`);
+    setLoading(false);
   }
 
   function errorCodeToText() {
@@ -122,9 +125,35 @@ function CreateUrlCard() {
         <div className="p-5 pt-0 text-white flex flex-col md:flex-row space-y-5 md:space-y-0 md:space-x-5">
           <button
             type="submit"
-            className="py-4 bg-blue-500 font-bold md:w-1/3 rounded-lg shadow-lg shadow-blue-500 hover:-translate-y-1 duration-75 hover:bg-blue-400"
+            className="py-4 bg-blue-500 font-bold md:w-1/3 rounded-lg shadow-lg shadow-blue-500 hover:-translate-y-1 duration-75 hover:bg-blue-400 flex items-center justify-center"
+            disabled={loading}
           >
-            Rút gọn
+            {loading ? (
+              <div className="flex items-center px-2">
+                <svg
+                  className="animate-spin h-5 w-5 mr-1.5 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Đang rút gọn...
+              </div>
+            ) : (
+              "Rút gọn"
+            )}
           </button>
           <button
             type="button"
