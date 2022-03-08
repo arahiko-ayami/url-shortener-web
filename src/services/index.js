@@ -25,18 +25,11 @@ const getShortenedUrl = async (id, password) => {
   return response.data;
 };
 
-const hasPassword = async (id) => {
-  const response = await axios.post(`${BASE_API_URL}url/has-password`, {
+const getInfo = async (id) => {
+  const response = await axios.post(`${BASE_API_URL}url/get-info`, {
     id,
   });
   return response.data;
 };
 
-const isIdExist = async (id) => {
-  const response = await axios.post(`${BASE_API_URL}url/is-id-exist`, {
-    id,
-  });
-  return response.data.data;
-};
-
-export { createShortenedUrl, getShortenedUrl, hasPassword, isIdExist };
+export { createShortenedUrl, getShortenedUrl, getInfo };

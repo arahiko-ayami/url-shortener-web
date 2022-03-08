@@ -1,4 +1,4 @@
-import { getShortenedUrl, hasPassword, isIdExist } from "../../services";
+import { getShortenedUrl, getInfo } from "../../services";
 import { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -25,13 +25,23 @@ function RedirectToUrl() {
     }
   };
 
+  const getIdInfo = async (id) => {
+    const { data } = await getInfo(id).catch((e) => {
+      setError(e.message);
+      throw e.message;
+    });
+    if (data) {
+      setUrlHasPasswords(data.hasPassword);
+      setIsExist(true);
+    } else {
+      setIsExist(false);
+    }
+  };
+
   useEffect(async () => {
     const currUrl = window.location.href;
     const id = currUrl.split("/")[3];
-    const result = await isIdExist(id);
-    setIsExist(result.isIdExist);
-    const { data } = await hasPassword(id);
-    setUrlHasPasswords(data.hasPassword);
+    await getIdInfo(id);
   }, []);
 
   useEffect(async () => {
@@ -63,7 +73,7 @@ function RedirectToUrl() {
               Click vào nút bên dưới để chuyển đến trang web của bạn
             </h2>
           </div>
-          {!urlHasPassword || (urlHasPassword && truePassword) ? (
+          {(!urlHasPassword || (urlHasPassword && truePassword)) && (
             <a
               href={url}
               className="py-4 px-5 bg-blue-500 font-bold w-2/3 sm:w-2/5 md:w-1/3 lg:w-1/4 rounded-lg shadow-lg shadow-blue-500 hover:-translate-y-1 duration-75 hover:bg-blue-400 items-center text-white flex justify-center"
@@ -95,7 +105,8 @@ function RedirectToUrl() {
                 "Nhấn vào đây để tiếp tục"
               )}
             </a>
-          ) : (
+          )}
+          {urlHasPassword && !truePassword && (
             <form
               className="flex flex-col w-2/3 sm:w-2/5 md:w-1/3 lg:w-1/4"
               onSubmit={onSubmitHandle}
