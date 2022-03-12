@@ -25,6 +25,7 @@ function CreateUrlCard() {
     const { data } = await createShortenedUrl(customUrl, url, password).catch(
       (error) => {
         setErrorCode(error.response.status);
+        setLoading(false);
       }
     );
     setShortenedUrl(`${BASE_URL}${data.id}`);
