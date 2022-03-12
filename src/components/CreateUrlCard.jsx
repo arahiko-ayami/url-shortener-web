@@ -109,8 +109,6 @@ function CreateUrlCard() {
                 <p>{BASE_URL}</p>
               </span>
               <input
-                type="url"
-                name="url"
                 ref={customUrlInputRef}
                 onChange={(e) => setCustomUrl(e.target.value)}
                 className="w-full focus:outline-none"
